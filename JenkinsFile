@@ -1,0 +1,23 @@
+pipeline
+{
+    agent any
+    stages
+    {
+            stage('Docker grid up')
+            {
+                steps
+                {
+                    bat "docker compose up"
+                }
+            }
+          
+    }
+    post
+    {
+        always
+        {
+            bat "docker compose down"
+            archiveArtifacts artifacts: 'index.html', followSymlinks: false
+        }
+    }
+}
