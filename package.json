@@ -6,7 +6,7 @@
   "scripts": {
     "clean:report": "rimraf test-result reports && mkdirp test-result reports",
     "generate:report": "node ./scripts/reportGenerate.js",
-    "pretest": " npm install  && .\\node_modules\\.bin\\playwright.cmd install --force &&  npm run clean:report",
+    "pretest": "npm install && npx playwright install --force && npm run clean:report",
     "executeScript": "cucumber-js",
     "postexecuteScript": "npm run generate:report",
     "test": " npm run executeScript",
