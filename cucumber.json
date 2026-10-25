@@ -1,0 +1,27 @@
+{
+    "default":
+    {
+     "paths":["tests/features/**/*.feature"],
+    "require":["tests/hooks/**/*.js","tests/config/**/*.js","tests/pages/**/*.js","tests/helper/**/*.js", "tests/stepdefinition/**/*.js","playwright.config.js"],
+     "tags":"",
+     "format":["html:reports/cucumber-report.html",
+               "json:reports/cucumber-report.json",
+                "rerun:@rerun.txt"]
+               
+
+     
+     
+    },
+    "rerun":
+    {
+    "require":["tests/hooks/**/*.js","tests/pages/**/*.js","tests/helper/**/*.js", "tests/stepdefinition/**/*.js"],
+     "tags":"",
+     "format":["html:reports/cucumber-report.html",
+               "json:reports/cucumber-report.json",
+                "rerun:@rerun.txt"]
+               ,
+     "parallel":1
+     
+     
+    }
+}

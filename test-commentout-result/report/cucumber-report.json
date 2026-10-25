@@ -1,0 +1,123 @@
+[
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "practice-test-to-automate-all-web-actions-with-playwright;test-to-automate-all-web-actions-using-playwright-01",
+        "keyword": "Scenario Outline",
+        "line": 13,
+        "name": "Test to Automate all web actions using Playwright-01",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 128983099
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "unknown",
+              "duration": 0
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 5,
+            "name": "user navigates to the page",
+            "match": {
+              "location": "tests\\stepdefinition\\core\\example.js:10"
+            }
+          },
+          {
+            "result": {
+              "status": "unknown",
+              "duration": 0
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 6,
+            "name": "user waits for \"login\" page to load",
+            "match": {
+              "location": "tests\\stepdefinition\\core\\example.js:15"
+            }
+          },
+          {
+            "result": {
+              "status": "unknown",
+              "duration": 0
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 7,
+            "name": "user logs in the application with credentials \"usernameText\" \"passwordText\"",
+            "match": {
+              "location": "tests\\stepdefinition\\core\\example.js:19"
+            }
+          },
+          {
+            "result": {
+              "status": "unknown",
+              "duration": 0
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 8,
+            "name": "user lands on the \"dashBoardHome\" dashboardPage",
+            "match": {
+              "location": "tests\\stepdefinition\\core\\example.js:28"
+            }
+          },
+          {
+            "result": {
+              "status": "unknown",
+              "duration": 0
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 9,
+            "name": "user adds products \"productName\" to cart",
+            "match": {
+              "location": "tests\\stepdefinition\\core\\example.js:35"
+            }
+          },
+          {
+            "result": {
+              "status": "unknown",
+              "duration": 0
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 10,
+            "name": "user clicks on Cart verifies Product and checkout",
+            "match": {
+              "location": "tests\\stepdefinition\\core\\example.js:42"
+            }
+          },
+          {
+            "result": {
+              "status": "unknown",
+              "duration": 0
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@test",
+            "line": 3
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "practice-test-to-automate-all-web-actions-with-playwright",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Practice test to automate all web actions with playwright",
+    "tags": [],
+    "uri": "tests\\features\\example.feature"
+  }
+]
