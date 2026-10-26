@@ -4,6 +4,6 @@ services:
   playwright-test:
     build: .
     container_name: playwright_docker
-    volumes:
-      - ./reports:/app/reports
+    # volumes:
+    #   - ./reports:/app/reports
     command: npm run test
