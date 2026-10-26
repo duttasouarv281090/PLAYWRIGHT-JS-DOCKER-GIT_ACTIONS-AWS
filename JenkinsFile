@@ -12,7 +12,7 @@ pipeline
             }
             stage('Copy Reports') {
             steps {
-                bat 'docker cp playwright_docker:/app/reports'
+                bat 'docker cp playwright_docker:/app/reports reports'
             }
         }
           
