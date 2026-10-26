@@ -7,17 +7,22 @@ pipeline
             {
                 steps
                 {
-                    bat "docker compose up"
+                    bat "bat "docker compose up --build --abort-on-container-exit""
                 }
             }
+        //     stage('Copy Reports') {
+        //     steps {
+        //         bat 'docker cp playwright_docker:/app/reports reports'
+        //     }
+        // }
           
     }
     post
     {
         always
         {
+            archiveArtifacts artifacts: 'reports/**', followSymlinks: false
             bat "docker compose down"
-            archiveArtifacts artifacts: 'index.html', followSymlinks: false
         }
     }
 }
