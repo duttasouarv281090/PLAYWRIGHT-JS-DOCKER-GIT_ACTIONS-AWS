@@ -10,11 +10,11 @@ pipeline
                     bat  "docker compose up --build --abort-on-container-exit"
                 }
             }
-        //     stage('Copy Reports') {
-        //     steps {
-        //         bat 'docker cp playwright_docker:/app/reports reports'
-        //     }
-        // }
+            stage('Copy Reports') {
+            steps {
+                bat 'docker cp playwright_docker:/app/reports'
+            }
+        }
           
     }
     post
