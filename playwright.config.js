@@ -1,11 +1,11 @@
 // @ts-check
-import { defineConfig, devices } from '@playwright/test';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
+ import { defineConfig, devices } from '@playwright/test';
+// import dotenv from 'dotenv';
+// import path from 'path';
+// import { fileURLToPath } from 'url';
 
-const configDirectory = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(configDirectory, '.env') });
+// const configDirectory = path.dirname(fileURLToPath(import.meta.url));
+// dotenv.config({ path: path.resolve(configDirectory, '.env') });
 
 const playwrightConfig = defineConfig({
   testDir: './tests',
