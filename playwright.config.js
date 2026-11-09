@@ -17,7 +17,7 @@ const playwrightConfig = defineConfig({
   fullyParallel: true,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [['html'],['allure']],
+  reporter: [['html']],
   /* Shared settings for all the projects below.*/
   use: {
     browserName:'chromium',
