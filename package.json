@@ -18,7 +18,6 @@
     "webkit": "cross-env BROWSER=webkit cucumber-js --parallel 2",
     "all:browsers": "npm-run-all --parallel chrome webkit",
     "all": "npm run clean:report && npm run all:browsers && npm run generate:report"
-
   },
   "keywords": [],
   "author": "",
@@ -34,7 +33,6 @@
     "rimraf": "^6.1.3"
   },
   "dependencies": {
-    "@playwright/mcp": "^0.0.83",
     "dotenv": "^17.4.2",
     "path": "^0.12.7"
   }

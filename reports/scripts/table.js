@@ -1,6 +1,24 @@
 /**
  * Features table logic: search, sort, pagination
  */
+
+// Locale helper — reads from window.ReportLocale set in the page's inline
+// <script> and falls back to the English string when the key is absent.
+function _loc(path, fallback) {
+  try {
+    const locale = window.ReportLocale || {};
+    const parts = path.split('.');
+    let val = locale;
+    for (const p of parts) {
+      val = val[p];
+      if (val === undefined) return fallback;
+    }
+    return typeof val === 'string' ? val : fallback;
+  } catch (_) {
+    return fallback;
+  }
+}
+
 window.ReportTable = {
   init: (data) => {
     const tableContainer = document.getElementById('features-table-container');
@@ -15,6 +33,8 @@ window.ReportTable = {
     const totalRecordsLabel = document.getElementById('total-records');
 
     if (!tableBody || !data.features) return;
+
+    const displayDuration = !!(window.ReportConfig && window.ReportConfig.displayDuration);
 
     let filteredFeatures = [...data.features];
     let currentPage = 1;
@@ -81,7 +101,7 @@ window.ReportTable = {
       if (platform === 'testmu') {
         return '<span title="TestMu AI"><i class="fa-solid fa-cloud text-base"></i></span>';
       }
-      return '<span title="Local machine"><i class="fa-solid fa-computer text-base"></i></span>';
+      return `<span title="${_loc('runInfo.localMachine', 'Local machine')}"><i class="fa-solid fa-computer text-base"></i></span>`;
     };
 
     const renderTable = () => {
@@ -94,7 +114,7 @@ window.ReportTable = {
           const total = (feature.passed || 0) + (feature.failed || 0) + (feature.ambiguous || 0) + (feature.notDefined || 0) + (feature.pending || 0) + (feature.skipped || 0);
           const passPercentage = total > 0 ? Math.round((feature.passed / total) * 100) : 0;
 
-          const device = feature.device || 'Desktop';
+          const device = feature.device || _loc('runInfo.desktop', 'Desktop');
           const os = feature.os || '';
           const browser = feature.browser || '';
           const deviceIcon = iconForDevice(device);
@@ -137,26 +157,35 @@ window.ReportTable = {
                   ${feature.skipped > 0 ? `<div class="h-full bg-status-skipped" style="width: ${(feature.skipped / total) * 100}%"></div>` : ''}
                 </div>
                 <div class="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] font-medium uppercase">
-                  <span class="text-status-passed">${feature.passed} Passed</span>
-                  <span class="text-status-failed">${feature.failed} Failed</span>
-                  ${feature.ambiguous > 0 ? `<span class="text-status-ambiguous">${feature.ambiguous} Ambiguous</span>` : ''}
-                  ${feature.notDefined > 0 ? `<span class="text-status-undefined">${feature.notDefined} Not Defined</span>` : ''}
-                  ${feature.pending > 0 ? `<span class="text-status-pending">${feature.pending} Pending</span>` : ''}
-                  <span class="text-status-skipped">${feature.skipped} Skipped</span>
+                  <span class="text-status-passed">${feature.passed} ${_loc('status.passed', 'Passed')}</span>
+                  <span class="text-status-failed">${feature.failed} ${_loc('status.failed', 'Failed')}</span>
+                  ${feature.ambiguous > 0 ? `<span class="text-status-ambiguous">${feature.ambiguous} ${_loc('status.ambiguous', 'Ambiguous')}</span>` : ''}
+                  ${feature.notDefined > 0 ? `<span class="text-status-undefined">${feature.notDefined} ${_loc('status.notDefined', 'Not Defined')}</span>` : ''}
+                  ${feature.pending > 0 ? `<span class="text-status-pending">${feature.pending} ${_loc('status.pending', 'Pending')}</span>` : ''}
+                  <span class="text-status-skipped">${feature.skipped} ${_loc('status.skipped', 'Skipped')}</span>
                 </div>
               </td>
               <td class="px-4 md:px-6 py-4 text-right whitespace-nowrap">
-                <div class="inline-flex items-center justify-end relative h-12 w-12">
-                  <svg class="h-12 w-12 transform -rotate-90">
-                    <circle class="text-muted/20" stroke-width="3" stroke="currentColor" fill="transparent" r="20" cx="24" cy="24" />
-                    <circle class="text-status-passed transition-all duration-500 ease-out" stroke-width="3" 
-                      stroke-dasharray="125.6" 
-                      stroke-dashoffset="${125.66 - (passPercentage * 1.2566)}" 
-                      stroke-linecap="round" stroke="currentColor" fill="transparent" r="20" cx="24" cy="24" />
+                <div class="inline-flex items-center justify-center relative h-12 w-12">
+                  <svg viewBox="0 0 48 48" class="h-12 w-12">
+                    <g transform="rotate(-90 24 24)">
+                      <circle class="text-muted/20" stroke-width="3" stroke="currentColor" fill="transparent" r="20" cx="24" cy="24" />
+                      <circle class="text-status-passed transition-all duration-500 ease-out" stroke-width="3" 
+                        stroke-dasharray="125.6" 
+                        stroke-dashoffset="${125.66 - (passPercentage * 1.2566)}" 
+                        stroke-linecap="round" stroke="currentColor" fill="transparent" r="20" cx="24" cy="24" />
+                    </g>
+                    <text x="24" y="24" text-anchor="middle" dominant-baseline="central" class="fill-current text-[10px] font-bold">${passPercentage}%</text>
                   </svg>
-                  <span class="absolute inset-0 flex items-center justify-center text-[10px] font-bold">${passPercentage}%</span>
                 </div>
               </td>
+              ${displayDuration ? `
+              <td class="px-6 py-4 text-right whitespace-nowrap">
+                <span class="inline-flex items-center gap-1 text-xs font-mono text-muted-foreground">
+                  <i class="fa-regular fa-clock"></i>
+                  ${feature.time || '\u2014'}
+                </span>
+              </td>` : ''}
             </tr>
           `;
         })
@@ -209,6 +238,12 @@ window.ReportTable = {
           case 3:
             valA = totalA > 0 ? a.passed / totalA : 0;
             valB = totalB > 0 ? b.passed / totalB : 0;
+            break;
+          case 4:
+            // Sort by raw duration (numeric) so the order is correct regardless
+            // of whether the displayed format is human-readable or hh:mm:ss.
+            valA = a.duration || 0;
+            valB = b.duration || 0;
             break;
           default:
             return 0;
@@ -269,7 +304,7 @@ window.ReportTable = {
     // Events
     const headers = tableContainer.querySelectorAll('thead th');
     headers.forEach((th, idx) => {
-      if (idx === 0 || idx === 2 || idx === 3) th.addEventListener('click', () => handleSort(idx));
+      if (idx === 0 || idx === 2 || idx === 3 || (displayDuration && idx === 4)) th.addEventListener('click', () => handleSort(idx));
     });
 
     searchInput?.addEventListener('input', (e) => {
@@ -298,12 +333,12 @@ window.ReportTable = {
 
       const titleSpan = document.createElement('span');
       titleSpan.className = 'text-[10px] font-bold text-muted-foreground uppercase px-1';
-      titleSpan.textContent = 'Tags';
+      titleSpan.textContent = _loc('dashboard.tags', 'Tags');
 
       const clearBtn = document.createElement('button');
       clearBtn.type = 'button';
       clearBtn.className = 'clear-tags-btn text-[10px] font-bold text-primary hover:underline px-1 cursor-pointer';
-      clearBtn.textContent = 'Clear';
+      clearBtn.textContent = _loc('dashboard.clear', 'Clear');
 
       headerDiv.appendChild(titleSpan);
       headerDiv.appendChild(clearBtn);
@@ -350,7 +385,7 @@ window.ReportTable = {
           cb.checked = false;
         });
         selectedTags = [];
-        filterLabel.textContent = 'Filter by tags...';
+        filterLabel.textContent = _loc('dashboard.filterByTags', 'Filter by tags...');
         filterLabel.classList.add('text-muted-foreground');
         applyAllFilters();
       });
@@ -360,7 +395,7 @@ window.ReportTable = {
         selectedTags = Array.from(checkedBoxes).map((cb) => cb.value);
 
         if (selectedTags.length === 0) {
-          filterLabel.textContent = 'Filter by tags...';
+          filterLabel.textContent = _loc('dashboard.filterByTags', 'Filter by tags...');
           filterLabel.classList.add('text-muted-foreground');
         } else {
           filterLabel.textContent = selectedTags.join(', ');
