@@ -1,0 +1,26 @@
+name: Playwright Docker Matrix
+on:
+  push:
+    branches:[main]
+  pull_request:
+    branches:[main,master]
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout Code
+        uses: actions/checkout@v4
+      - name: Docker Grid up
+        run: docker compose up --build --abort-on-container-exit
+      - name: Copy Reports
+        if: always()
+        run: docker cp playwright_docker:/app/reports ./reports
+      - name: Clean Up container
+        if: always()
+        run: docker compose down
+      - name: Upload Artifcats
+        if: always()
+        uses: action/upload-artifact@v4
+        with:
+          name: playwright-Reports
+          path: reports/
